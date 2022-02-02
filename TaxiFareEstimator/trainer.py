@@ -24,7 +24,7 @@ MODEL_NAME = 'taxifare'
 MODEL_VERSION = 'v1'
 
 STORAGE_LOCATION = 'models/taxifareestimator/model.joblib'
-
+EXPERIMENT_NAME = "first_experiment"
 
 class Trainer():
     def __init__(self, X, y):
