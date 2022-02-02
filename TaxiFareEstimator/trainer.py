@@ -1,10 +1,30 @@
 from TaxiFareEstimator.data import get_data, clean_data
 from TaxiFareEstimator.encoders import TimeFeaturesEncoder, DistanceTransformer
 from TaxiFareEstimator.utils import compute_rmse
+#from TaxiFareEstimator.params import BUCKET_NAME,BUCKET_TRAIN_DATA_PATH,MODEL_NAME,MODEL_VERSION,STORAGE_LOCATION
 from sklearn.compose import ColumnTransformer
 from sklearn.linear_model import LinearRegression
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import OneHotEncoder, StandardScaler
+from google.cloud import storage
+import pandas as pd
+from sklearn import linear_model
+import numpy as np
+import joblib
+
+# bucket name - replace with your GCP bucket name
+BUCKET_NAME='dantas-lrmd'
+# train data file location
+# /!\ here you need to decide if you are going to train using the provided and uploaded data/train_1k.csv sample file
+# or if you want to use the full dataset (you need need to upload it first of course)
+BUCKET_TRAIN_DATA_PATH = 'data/train_1k.csv'
+# model folder name (will contain the folders for all trained model versions)
+MODEL_NAME = 'taxifare'
+# model version folder name (where the trained model.joblib file will be stored)
+MODEL_VERSION = 'v1'
+
+STORAGE_LOCATION = 'models/taxifareestimator/model.joblib'
+EXPERIMENT_NAME = "first_experiment"
 
 class Trainer():
     def __init__(self, X, y):
@@ -52,6 +72,26 @@ class Trainer():
         rmse = compute_rmse(y_pred, y_test)
         return round(rmse, 2)
 
+    def upload_model_to_gcp(self):
+
+        client = storage.Client()
+        bucket = client.bucket(BUCKET_NAME)
+        blob = bucket.blob(STORAGE_LOCATION)
+        blob.upload_from_filename('model.joblib')
+
+    def save_model(self):
+        """method that saves the model into a .joblib file and uploads it on Google Storage /models folder
+        HINTS : use joblib library and google-cloud-storage"""
+
+        # saving the trained model to disk is mandatory to then beeing able to upload it to storage
+        # Implement here
+        joblib.dump(self.pipeline.fit(self.X, self.y), 'model.joblib')
+        print("saved model.joblib locally")
+
+        # Implement here
+        self.upload_model_to_gcp()
+        print(f"uploaded model.joblib to gcp cloud storage under \n => {STORAGE_LOCATION}")
+
 
 if __name__ == "__main__":
     N = 10_000
@@ -65,4 +105,5 @@ if __name__ == "__main__":
     trainer = Trainer(X_train, y_train)
     trainer.run()
     rmse = trainer.evaluate(X_test, y_test)
+    trainer.save_model()
     print(f"rmse: {rmse}")
