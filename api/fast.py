@@ -28,12 +28,12 @@ def index():
 
 
 @app.get("/predict")
-def predict(pickup_datetime,        # 2013-07-06 17:18:00
-            pickup_longitude,       # -73.950655
-            pickup_latitude,        # 40.783282
-            dropoff_longitude,      # -73.984365
-            dropoff_latitude,       # 40.769802
-            passenger_count):       # 1
+def predict(pickup_datetime,         #2013-07-06 17:18:00
+            pickup_longitude,        #-73.950655
+            pickup_latitude,         #40.783282
+            dropoff_longitude,       #-73.984365
+            dropoff_latitude,        #40.769802
+            passenger_count):        #1
 
     # create datetime object from user provided date
     pickup_datetime = datetime.strptime(pickup_datetime, "%Y-%m-%d %H:%M:%S")
@@ -62,8 +62,6 @@ def predict(pickup_datetime,        # 2013-07-06 17:18:00
         dropoff_longitude=[float(dropoff_longitude)],
         dropoff_latitude=[float(dropoff_latitude)],
         passenger_count=[int(passenger_count)]))
-
-    # ⚠️ TODO: get model from GCP
 
     # pipeline = get_model_from_gcp()
     pipeline = joblib.load('model.joblib')
