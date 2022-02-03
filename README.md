@@ -1,74 +1,33 @@
-# Data analysis
-- Document here the project: TaxiFareEstimator
-- Description: Project Description
-- Data Source:
-- Type of analysis:
+# Introduction
+### The project has the objective to create a public API of a taxi fare prediction in the city of New York.
+> **a.** Create the Model and Prediction - based on available data\
+**b.** Make it into a package\
+**c.** Push API in container running locally\
+**d.** Push API in Cloud Run
 
-Please document the project the better you can.
 
-# Startup the project
+# Model
 
-The initial setup.
+- A Linear Regression was trained in 10,000 data points based on 7 features.
+- The features are:
+>>>a.pick up location(lat and long)\
+>>>b.drop off location(lat and long)\
+>>>c.number of passengers\
+>>>d.time and day of the week
 
-Create virtualenv and install the project:
+The model is already trained and available in gcp and is being used to predict the taxi fare in api.
+However it can be trained again with new data if necessary.
+
+# Package
+
+The package can be installed by:
 ```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv ~/venv ; source ~/venv/bin/activate ;\
-    pip install pip -U; pip install -r requirements.txt
+pip install git+ssh://git@github.com/LouiseDantas/TaxiFareEstimator
 ```
+Can use the trainer class to set the pipeline, run the model, evaluate it and upload into gcp or save locally (save_model method).
 
-Unittest test:
-```bash
-make clean install test
-```
+# API
 
-Check for TaxiFareEstimator in gitlab.com/{group}.
-If your project is not set please add it:
+The API was build using FastAPI and pushed as a Docker container into Google Cloud Run. This way the api is available at:
 
-- Create a new project on `gitlab.com/{group}/TaxiFareEstimator`
-- Then populate it:
-
-```bash
-##   e.g. if group is "{group}" and project_name is "TaxiFareEstimator"
-git remote add origin git@github.com:{group}/TaxiFareEstimator.git
-git push -u origin master
-git push -u origin --tags
-```
-
-Functionnal test with a script:
-
-```bash
-cd
-mkdir tmp
-cd tmp
-TaxiFareEstimator-run
-```
-
-# Install
-
-Go to `https://github.com/{group}/TaxiFareEstimator` to see the project, manage issues,
-setup you ssh public key, ...
-
-Create a python3 virtualenv and activate it:
-
-```bash
-sudo apt-get install virtualenv python-pip python-dev
-deactivate; virtualenv -ppython3 ~/venv ; source ~/venv/bin/activate
-```
-
-Clone the project and install it:
-
-```bash
-git clone git@github.com:{group}/TaxiFareEstimator.git
-cd TaxiFareEstimator
-pip install -r requirements.txt
-make clean install test                # install and test
-```
-Functionnal test with a script:
-
-```bash
-cd
-mkdir tmp
-cd tmp
-TaxiFareEstimator-run
-```
+https:// taxifareapi-v75w2fyqhq-ew.a.run.app/127.0.0.1:8000/predict
