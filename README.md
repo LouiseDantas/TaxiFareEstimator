@@ -30,4 +30,4 @@ Can use the trainer class to set the pipeline, run the model, evaluate it and up
 
 The API was build using FastAPI and pushed as a Docker container into Google Cloud Run. This way the api is available at:
 
-https:// taxifareapi-v75w2fyqhq-ew.a.run.app/127.0.0.1:8000/predict
+https://taxifareapi-v75w2fyqhq-ew.a.run.app/
